@@ -317,7 +317,7 @@ object ZStreamPlatformSpecificSpec extends ZIOBaseSpec {
           val data  = Array.tabulate[Byte](ZStream.DefaultChunkSize * 5 / 2)(_.toByte)
           val write = (out: OutputStream) => { out.write(data); out.close() }
           ZStream.fromOutputStreamWriter(write).runCollect.map(assert(_)(equalTo(Chunk.fromArray(data))))
-        } @@ timeout(10.seconds) @@ flaky,
+        } @@ timeout(10.seconds) @@ nonFlaky(1000),
         testM("is interruptable") {
           val latch = new CountDownLatch(1)
           val write = (out: OutputStream) => { latch.await(); out.write(42); }
